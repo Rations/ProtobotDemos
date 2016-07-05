@@ -1,3 +1,43 @@
+#include <Wire.h>
+#include <Adafruit_MotorShield.h>
+#include "utility/Adafruit_MS_PWMServoDriver.h"
+#include <Servo.h>
+
+const int VACUUM_PIN = 2;
+const int JOYSTICK_LX_PIN = A0;
+const int JOYSTICK_LY_PIN = A1;
+const int JOYSTICK_RX_PIN = A2;
+const int JOYSTICK_RY_PIN = A3;
+
+const int JOYSTICK_MIN = 0;
+const int JOYSTICK_MAX = 1023;
+#define ARM_SPEED_MIN    60
+#define ARM_SPEED_ZERO   90
+#define ARM_SPEED_MAX   120
+#define BASE_SPEED_MIN    -255
+#define BASE_SPEED_MAX   255   
+#define LIFT_SPEED_MIN    -255
+#define LIFT_SPEED_MAX   255
+
+int readAxis(int thisAxis, int low, int high) {
+  int reading = analogRead(thisAxis);
+  reading = map(reading, JOYSTICK_MIN, JOYSTICK_MAX, low, high);
+  int center = (high - low) / 2 + low;
+  int distance = reading - center;
+  int threshold = (high - low) / 10; 
+  if (abs(distance) < threshold) {
+    distance = 0;
+  }
+  return distance;
+}
+                          
+// Specify Arduino pins for arm servo and PS2 controller connections. 
+#define ARM_SERVO_PIN     10
+
+// PS2 joystick characteristics.
+#define REFRESH       5     // Controller refresh rate (ms)
+
+
 // Declare servo, motor, and PS2 controller objects.
 Servo armServo;
 Adafruit_MotorShield motorShield  = Adafruit_MotorShield();
@@ -80,4 +120,3 @@ void loop() {
   
   delay(REFRESH);
 }
-
