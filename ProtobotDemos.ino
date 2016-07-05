@@ -3,28 +3,28 @@
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 #include <Servo.h>
 
-const int VACUUM_PIN = 2;
+const int VACUUM_PIN      = 2;
 const int JOYSTICK_LX_PIN = A0;
 const int JOYSTICK_LY_PIN = A1;
 const int JOYSTICK_RX_PIN = A2;
 const int JOYSTICK_RY_PIN = A3;
 
-const int JOYSTICK_MIN = 0;
-const int JOYSTICK_MAX = 1023;
-#define ARM_SPEED_MIN    0
-#define ARM_SPEED_ZERO 90
-#define ARM_SPEED_MAX   180
-#define BASE_SPEED_MIN    -255
-#define BASE_SPEED_MAX   255   
-#define LIFT_SPEED_MIN    -255
-#define LIFT_SPEED_MAX   255
+const int JOYSTICK_MIN    = 0;
+const int JOYSTICK_MAX    = 1023;
+const int ARM_SPEED_MIN   = 0;
+const int ARM_SPEED_ZERO  = 90;
+const int ARM_SPEED_MAX   = 180;
+const int BASE_SPEED_MIN  = -255;
+const int BASE_SPEED_MAX  = 255;   
+const int LIFT_SPEED_MIN  = -255;
+const int LIFT_SPEED_MAX  = 255;
 
 int readAxis(int thisAxis, int low, int high) {
   int reading = analogRead(thisAxis);
   reading = map(reading, JOYSTICK_MIN, JOYSTICK_MAX, low, high);
   int center = (high - low) / 2 + low;
   int distance = reading - center;
-  int threshold = (high - low) / 4; 
+  int threshold = (high - low) / 6; 
   if (abs(distance) < threshold) {
     distance = 0;
   }
